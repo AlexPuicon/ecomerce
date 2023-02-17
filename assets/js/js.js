@@ -22,6 +22,11 @@ function eventListenersLoader(){
     //* Se ejecuta cuando se presione el botón "Add to car"
     productsList.addEventListener('click', addProduct);
 
+    document.addEventListener('DOMContentLoaded', () => {
+        carProducts = JSON.parse(localStorage.getItem('car')) || [];
+        carElementsHTML();
+    })
+
 }
 
 // Petición GET.
@@ -130,7 +135,26 @@ function carElementsHTML() {
         <hr>
         `;
         carList.appendChild(div)
-        console.log(carList)
+        //console.log(carList)
+        productsStorage()
     })
     
+}
+
+carList.addEventListener("click", (e) => {
+    if(e.target.classList.contains('delete__product')){
+        const id = e.target.getAttribute('data-id');
+        carProducts=carProducts.filter(product => product.id!=id);
+    }
+    carElementsHTML();
+})
+carBlock.addEventListener("click", (e) => {
+    if(e.target.classList.contains('empty__button')){
+        carList.innerHTML="";
+        carProducts=[];
+    }
+    carElementsHTML();
+})
+function productsStorage(){
+    localStorage.setItem('car', JSON.stringify(carProducts))
 }
